@@ -1,5 +1,5 @@
 #Terminator = CR;
-extraInput=ignore;
+ExtraInput=ignore;
 
 snap {
    out "SNAP?1,2,3,4,9";

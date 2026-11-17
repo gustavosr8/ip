@@ -3,22 +3,31 @@
 #! DBDEND
 
 
-record(calc, "$(P)SR830:$(N):SensCalc") {
-  field(DESC, "Calc Time Const.")
-  field(CALC, "A+B*3+C*9-1")
-  field(INPA, "$(P)SR830:$(N):Sens1.VAL  CP MS")
-  field(INPB, "$(P)SR830:$(N):Sens2.VAL  CP MS")
-  field(INPC, "$(P)SR830:$(N):Sens3.VAL  CP MS")
+record(ao, "$(P):$(N):Sens") {
+  field(DESC, "Set sensitivity")
+  field(DTYP, "stream")
+  field(OUT, "@SR830.proto set_sens $(PORT)")
 }
 
-record(calc, "$(P)SR830:$(N):TCcalc") {
-  field(DESC, "Calc Time Const.")
-  field(CALC, "A+B*2+C*6-2")
-  field(INPA, "$(P)SR830:$(N):TC1.RVAL  CP MS")
-  field(INPB, "$(P)SR830:$(N):TC2.RVAL  CP MS")
-  field(INPC, "$(P)SR830:$(N):TC3.RVAL  CP MS")
+record(ao, "$(P):$(N):TC") {
+  field(DESC, "Set time constant")
+  field(DTYP, "stream")
+  field(OUT, "@SR830.proto set_tc $(PORT)")
 }
 
+record(ai, "$(P):$(N):Sens_RBV") {
+  field(DESC, "Read sensitivity")
+  field(DTYP, "stream")
+  field(INP, "@SR830.proto read_sens $(PORT)")
+  field(SCAN, "1 second")
+}
+
+record(ai, "$(P):$(N):TC_RBV") {
+  field(DESC, "Read time constant")
+  field(DTYP, "stream")
+  field(INP, "@SR830.proto read_tc $(PORT)")
+  field(SCAN, "1 second")
+}
 
 record(mbbo, "$(P)SR830:$(N):ResvCh") {
   field(DTYP, "Soft Channel")
@@ -30,100 +39,6 @@ record(mbbo, "$(P)SR830:$(N):ResvCh") {
   field(ZRST, "High Reserve")
   field(ONST, "Normal")
   field(TWST, "Low Noise")
-}
-
-record(mbbo, "$(P)SR830:$(N):Sens1") {
-  field(DESC, "Sens Multiplier")
-  field(DTYP, "Soft Channel")
-  field(NOBT, "2")
-  field(ONVL, "1")
-  field(TWVL, "2")
-  field(ZRST, "1")
-  field(ONST, "2")
-  field(TWST, "5")
-}
-
-record(mbbo, "$(P)SR830:$(N):Sens2") {
-  field(DESC, "Sens Decade")
-  field(DTYP, "Soft Channel")
-  field(NOBT, "2")
-  field(ONVL, "1")
-  field(TWVL, "2")
-  field(THVL, "0")
-  field(FRVL, "0")
-  field(FVVL, "0")
-  field(SXVL, "0")
-  field(SVVL, "0")
-  field(EIVL, "0")
-  field(NIVL, "0")
-  field(ZRST, "x1")
-  field(ONST, "x10")
-  field(TWST, "x100")
-}
-
-record(mbbo, "$(P)SR830:$(N):Sens3") {
-  field(DESC, "Sens. Magnitude")
-  field(DTYP, "Soft Channel")
-  field(NOBT, "2")
-  field(ONVL, "1")
-  field(TWVL, "2")
-  field(THVL, "3")
-  field(FRVL, "0")
-  field(FVVL, "0")
-  field(SXVL, "0")
-  field(SVVL, "0")
-  field(EIVL, "0")
-  field(NIVL, "0")
-  field(ZRST, "nv/fA")
-  field(ONST, "uV/pA")
-  field(TWST, "mV/nA")
-  field(THST, "V/uA")
-}
-
-record(mbbo, "$(P)SR830:$(N):TC1") {
-  field(DESC, "Time Const. Multiplier")
-  field(DTYP, "Soft Channel")
-  field(NOBT, "1")
-  field(ONVL, "1")
-  field(ZRST, "1")
-  field(ONST, "3")
-}
-
-record(mbbo, "$(P)SR830:$(N):TC2") {
-  field(DESC, "Time Const. Decade")
-  field(DTYP, "Soft Channel")
-  field(NOBT, "2")
-  field(ONVL, "1")
-  field(TWVL, "2")
-  field(THVL, "0")
-  field(FRVL, "0")
-  field(FVVL, "0")
-  field(SXVL, "0")
-  field(SVVL, "0")
-  field(EIVL, "0")
-  field(NIVL, "0")
-  field(ZRST, "x1")
-  field(ONST, "x10")
-  field(TWST, "x100")
-}
-
-record(mbbo, "$(P)SR830:$(N):TC3") {
-  field(DESC, "Time Const. Magnitude")
-  field(DTYP, "Soft Channel")
-  field(NOBT, "2")
-  field(ONVL, "1")
-  field(TWVL, "2")
-  field(THVL, "3")
-  field(FRVL, "0")
-  field(FVVL, "0")
-  field(SXVL, "0")
-  field(SVVL, "0")
-  field(EIVL, "0")
-  field(NIVL, "0")
-  field(ZRST, "us")
-  field(ONST, "ms")
-  field(TWST, "s")
-  field(THST, "ks")
 }
 
 record(asyn, "$(P)SR830:$(N):WritePhas") {
@@ -166,37 +81,7 @@ record(asyn, "$(P)SR830:$(N):ReadPhas") {
   field(FLNK, "$(P)SR830:$(N):Phas")
 }
 
-record(asyn, "$(P)SR830:$(N):ReadSens") {
-  field(DESC, "Read Time Const.")
-  field(FLNK, "$(P)SR830:$(N):SensRng.VAL  PP MS")
-  field(AOUT, "SENS?")
-  field(PORT, "$(PORT)")
-  field(SCAN, "1 second")
-  field(SDIS, "$(P)SR830:$(N):SlowRead")
-}
-
-record(asyn, "$(P)SR830:$(N):ReadTC") {
-  field(DESC, "Read Time Const.")
-  field(FLNK, "$(P)SR830:$(N):TCRng.VAL  PP MS")
-  field(AOUT, "OFLT?")
-  field(PORT, "$(PORT)")
-  field(SCAN, "1 second")
-  field(SDIS, "$(P)SR830:$(N):SlowRead")
-}
-
 record(asyn, "$(P)SR830:$(N):WriteResv") {
-  field(DESC, "Write Command")
-  field(TMOD, "Write")
-  field(PORT, "$(PORT)")
-}
-
-record(asyn, "$(P)SR830:$(N):WriteSens") {
-  field(DESC, "Write Command")
-  field(TMOD, "Write")
-  field(PORT, "$(PORT)")
-}
-
-record(asyn, "$(P)SR830:$(N):WriteTC") {
   field(DESC, "Write Command")
   field(TMOD, "Write")
   field(PORT, "$(PORT)")
@@ -245,61 +130,6 @@ record(scalcout, "$(P)SR830:$(N):ResvCmd") {
   field(AA, "RMOD")
 }
 
-record(scalcout, "$(P)SR830:$(N):Sens") {
-  field(CALC, "BB + ' ' + AA")
-}
-
-record(scalcout, "$(P)SR830:$(N):SensCmd") {
-  field(FLNK, "0")
-  field(CALC, "AA + printf(' %i',A)")
-  field(INPA, "$(P)SR830:$(N):SensCalc.VAL  CP MS")
-  field(INBB, "0")
-  field(OUT, "$(P)SR830:$(N):WriteSens.AOUT  PP MS")
-  field(PREC, "0")
-  field(AA, "SENS")
-}
-
-record(scalcout, "$(P)SR830:$(N):SensNum") {
-  field(CALC, "A-NINT((A-3)/9)*9+2")
-  field(INPA, "$(P)SR830:$(N):ReadSens.AINP  NPP MS")
-  field(OUT, "$(P)SR830:$(N):SensNumS.SELN  PP MS")
-}
-
-record(scalcout, "$(P)SR830:$(N):SensRng") {
-  field(FLNK, "$(P)SR830:$(N):SensNum.VAL  PP MS")
-  field(CALC, "NINT((A-3)/9)+1")
-  field(INPA, "$(P)SR830:$(N):ReadSens.AINP  NPP MS")
-  field(OUT, "$(P)SR830:$(N):SensRngS.SELN  PP MS")
-}
-
-record(scalcout, "$(P)SR830:$(N):TC") {
-  field(CALC, "BB + ' ' + AA")
-}
-
-record(scalcout, "$(P)SR830:$(N):TCNum") {
-  field(CALC, "A-NINT((A-1)/6)*6+3")
-  field(INPA, "$(P)SR830:$(N):ReadTC.AINP  NPP MS")
-  field(OUT, "$(P)SR830:$(N):TCNumS.SELN  PP MS")
-}
-
-record(scalcout, "$(P)SR830:$(N):TCRng") {
-  field(FLNK, "$(P)SR830:$(N):TCNum.VAL  PP MS")
-  field(CALC, "NINT((A-1)/6)+1")
-  field(INPA, "$(P)SR830:$(N):ReadTC.AINP  NPP MS")
-  field(OUT, "$(P)SR830:$(N):TCRngS.SELN  PP MS")
-}
-
-record(scalcout, "$(P)SR830:$(N):TCcmd") {
-  field(FLNK, "0")
-  field(CALC, "AA + printf(' %i',A)")
-  field(INPA, "$(P)SR830:$(N):TCcalc.VAL  CP MS")
-  field(INBB, "0")
-  field(OUT, "$(P)SR830:$(N):WriteTC.AOUT  PP MS")
-  field(PREC, "0")
-  field(AA, "OFLT")
-}
-
-
 record(sseq, "$(P)SR830:$(N):Disp1S") {
   field(SELM, "Specified")
   field(SELL, "$(P)SR830:$(N):Disp1_calc.VAL  CP MS")
@@ -314,86 +144,6 @@ record(sseq, "$(P)SR830:$(N):Disp1S") {
   field(STR4, "D")
   field(LNK5, "$(P)SR830:$(N):Disp1.CALC NPP MS")
   field(STR5, "E")
-}
-
-record(sseq, "$(P)SR830:$(N):SensNumS") {
-  field(SELM, "Specified")
-  field(DLY1, "0.05")
-  field(LNK1, "$(P)SR830:$(N):Sens.BB  PP MS")
-  field(STR1, "1")
-  field(DLY2, "0.05")
-  field(LNK2, "$(P)SR830:$(N):Sens.BB  PP MS")
-  field(STR2, "2")
-  field(DLY3, "0.05")
-  field(LNK3, "$(P)SR830:$(N):Sens.BB  PP MS")
-  field(STR3, "5")
-  field(DLY4, "0.05")
-  field(LNK4, "$(P)SR830:$(N):Sens.BB  PP MS")
-  field(STR4, "10")
-  field(DLY5, "0.05")
-  field(LNK5, "$(P)SR830:$(N):Sens.BB  PP MS")
-  field(STR5, "20")
-  field(DLY6, "0.05")
-  field(LNK6, "$(P)SR830:$(N):Sens.BB  PP MS")
-  field(STR6, "50")
-  field(DLY7, "0.05")
-  field(LNK7, "$(P)SR830:$(N):Sens.BB  PP MS")
-  field(STR7, "100")
-  field(DLY8, "0.05")
-  field(LNK8, "$(P)SR830:$(N):Sens.BB  PP MS")
-  field(STR8, "200")
-  field(DLY9, "0.05")
-  field(LNK9, "$(P)SR830:$(N):Sens.BB  PP MS")
-  field(STR9, "500")
-}
-
-record(sseq, "$(P)SR830:$(N):SensRngS") {
-  field(SELM, "Specified")
-  field(LNK1, "$(P)SR830:$(N):Sens.AA  NPP MS")
-  field(STR1, "nV/fA")
-  field(LNK2, "$(P)SR830:$(N):Sens.AA  NPP MS")
-  field(STR2, "uV/pA")
-  field(LNK3, "$(P)SR830:$(N):Sens.AA  NPP MS")
-  field(STR3, "mV/nA")
-  field(LNK4, "$(P)SR830:$(N):Sens.AA  NPP MS")
-  field(STR4, "V/uA")
-}
-
-record(sseq, "$(P)SR830:$(N):TCNumS") {
-  field(SELM, "Specified")
-  field(DLY1, "0.05")
-  field(LNK1, "$(P)SR830:$(N):TC.BB  PP MS")
-  field(STR1, "1")
-  field(DLY2, "0.05")
-  field(LNK2, "$(P)SR830:$(N):TC.BB  PP MS")
-  field(STR2, "3")
-  field(DLY3, "0.05")
-  field(LNK3, "$(P)SR830:$(N):TC.BB  PP MS")
-  field(STR3, "10")
-  field(DLY4, "0.05")
-  field(LNK4, "$(P)SR830:$(N):TC.BB  PP MS")
-  field(STR4, "30")
-  field(DLY5, "0.05")
-  field(LNK5, "$(P)SR830:$(N):TC.BB  PP MS")
-  field(STR5, "100")
-  field(DLY6, "0.05")
-  field(LNK6, "$(P)SR830:$(N):TC.BB  PP MS")
-  field(STR6, "300")
-  field(DLY7, "0.05")
-  field(DLY8, "0")
-  field(DLY9, "0")
-}
-
-record(sseq, "$(P)SR830:$(N):TCRngS") {
-  field(SELM, "Specified")
-  field(LNK1, "$(P)SR830:$(N):TC.AA  PP MS")
-  field(STR1, "us")
-  field(LNK2, "$(P)SR830:$(N):TC.AA  PP MS")
-  field(STR2, "ms")
-  field(LNK3, "$(P)SR830:$(N):TC.AA  PP MS")
-  field(STR3, "s")
-  field(LNK4, "$(P)SR830:$(N):TC.AA  PP MS")
-  field(STR4, "ks")
 }
 
 record(ai, "$(P)SR830:$(N):read") {
